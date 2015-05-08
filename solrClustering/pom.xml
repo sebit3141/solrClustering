@@ -72,7 +72,7 @@
                 <version>1.0-alpha-2</version>
                 <configuration>
                     <files>
-                        <!-- properties are read from profile specific property file -->
+                        <!-- properties are read from specific property file -->
                         <file>${project.basedir}/src/main/resources/config.properties</file>
                     </files>
                 </configuration>
@@ -96,13 +96,13 @@
                 </executions>
             </plugin>
 
-            <!-- copying of project resources to the output directory with: maven-resources-plugin -->
+            <!-- copy project resources to the outputDirectory with maven-resources-plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>2.7</version>
                 <executions>
-                    <!-- copy the solr.xml to the correct directory and apply properties filtering to it. -->
+                    <!-- copy and configure (to filter) the solr.xml to the solr home directory -->
                     <execution>
                         <id>copy-solr-xml</id>
                         <phase>compile</phase>
@@ -110,10 +110,10 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <!-- configure the directory in which the file is copied. -->
+                            <!-- create and determine the outputDirectory -->
                             <outputDirectory>${solr.solr.home}</outputDirectory>
                             <resources>
-                                <!-- configure the copied file and apply properties filtering to it. -->
+                            	<!-- copy and configure (to filter) resources -->
                                 <resource>
                                     <directory>${project.basedir}/src/main/resources</directory>
                                     <filtering>true</filtering>
@@ -124,7 +124,7 @@
                             </resources>
                         </configuration>
                     </execution>
-                    <!-- copy the core.properties to the correct directory and apply properties filtering to it. -->
+                    <!-- copy the core.properties to the solr core directory -->
                     <execution>
                         <id>copy-core-properties</id>
                         <phase>compile</phase>
@@ -132,10 +132,10 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <!-- configure the directory in which the file is copied. -->
+                            <!-- create and determine solr core directory -->
                             <outputDirectory>${solr.solr.home}/${solr.default.core.directory}</outputDirectory>
                             <resources>
-                                <!-- configure the copied file and apply properties filtering to it. -->
+                            <!-- copy and configure (to filter) resources -->
                                 <resource>
                                     <directory>${project.basedir}/src/main/resources</directory>
                                     <filtering>true</filtering>
@@ -146,7 +146,7 @@
                             </resources>
                         </configuration>
                     </execution>
-                    <!-- copy everything found from the src/main/config directory to the correct directory. -->
+                    <!-- copy everything from the src/main/config directory to the outputDirectory -->
                     <execution>
                         <id>copy-solr-config</id>
                         <phase>compile</phase>
@@ -154,9 +154,9 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <!-- Configure the target directory in which the files are copied. -->
+                            <!-- create and determine solr home directory -->
                             <outputDirectory>${solr.solr.home}/${solr.default.core.directory}/conf</outputDirectory>
-                            <!-- Configure the directory which contents are copied to the target directory. Disable properties filtering. -->
+                            <!-- copy resources -->
                             <resources>
                                 <resource>
                                     <directory>${project.basedir}/src/main/config</directory>
@@ -175,6 +175,7 @@
                 <version>2.6</version>
                 <configuration>
                     <filesets>
+                    	<!--> mvn clean: Project -->
                         <fileset>
                             <directory>./target</directory>
                         </fileset>

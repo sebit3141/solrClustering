@@ -6,10 +6,11 @@ dist
 solr
 target
 #ignore Eclispe
-${solr.solr.home}
 .classpath
 .project
 .settings
+${solr.solr.home}
+Users
 #ingore others
 *.iml
 overlays
