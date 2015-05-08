@@ -1,0 +1,366 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>de.sebit.sev</groupId>
+    <artifactId>solr-clustering</artifactId>
+    <packaging>war</packaging>
+    <version>0.0.1-SNAPSHOT</version>
+
+    <!-- Properties -->
+    <properties>
+        <slf4j.version>1.7.7</slf4j.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <dir.contrib.clustering>${project.basedir}/contrib/clustering/lib</dir.contrib.clustering>
+    </properties>
+    
+    <!-- Dependencies -->
+    <dependencies>
+        <!-- slf4j -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jul-to-slf4j</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
+        </dependency>
+        <!-- Solr -->
+        <dependency>
+            <groupId>org.apache.solr</groupId>
+            <artifactId>solr</artifactId>
+            <version>4.10.4</version>
+            <type>war</type>
+        </dependency>
+    </dependencies>
+
+    <!-- Build -->
+    <build>
+        <finalName>solr</finalName>
+        <filters>
+            <filter>${project.basedir}/src/main/resources/config.properties</filter>
+        </filters>
+        <resources>
+            <resource>
+                <filtering>true</filtering>
+                <directory>${project.basedir}/src/main/resources</directory>
+            </resource>
+        </resources>
+
+        <!-- Plugins -->
+        <plugins>
+            <!-- read properties of file config.properties with: mojo properties-maven-plugin -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>properties-maven-plugin</artifactId>
+                <version>1.0-alpha-2</version>
+                <configuration>
+                    <files>
+                        <!-- properties are read from profile specific property file -->
+                        <file>${project.basedir}/src/main/resources/config.properties</file>
+                    </files>
+                </configuration>
+                <executions>
+                    <!-- load properties for the default lifecycle -->
+                    <execution>
+                        <id>default-lifecycle-properties</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>read-project-properties</goal>
+                        </goals>
+                    </execution>
+                    <!-- load properties for the clean lifecycle -->
+                    <execution>
+                        <id>clean-lifecycle-properties</id>
+                        <phase>pre-clean</phase>
+                        <goals>
+                            <goal>read-project-properties</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- copying of project resources to the output directory with: maven-resources-plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.7</version>
+                <executions>
+                    <!-- copy the solr.xml to the correct directory and apply properties filtering to it. -->
+                    <execution>
+                        <id>copy-solr-xml</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <!-- configure the directory in which the file is copied. -->
+                            <outputDirectory>${solr.solr.home}</outputDirectory>
+                            <resources>
+                                <!-- configure the copied file and apply properties filtering to it. -->
+                                <resource>
+                                    <directory>${project.basedir}/src/main/resources</directory>
+                                    <filtering>true</filtering>
+                                    <includes>
+                                        <include>solr.xml</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <!-- copy the core.properties to the correct directory and apply properties filtering to it. -->
+                    <execution>
+                        <id>copy-core-properties</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <!-- configure the directory in which the file is copied. -->
+                            <outputDirectory>${solr.solr.home}/${solr.default.core.directory}</outputDirectory>
+                            <resources>
+                                <!-- configure the copied file and apply properties filtering to it. -->
+                                <resource>
+                                    <directory>${project.basedir}/src/main/resources</directory>
+                                    <filtering>true</filtering>
+                                    <includes>
+                                        <include>core.properties</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <!-- copy everything found from the src/main/config directory to the correct directory. -->
+                    <execution>
+                        <id>copy-solr-config</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <!-- Configure the target directory in which the files are copied. -->
+                            <outputDirectory>${solr.solr.home}/${solr.default.core.directory}/conf</outputDirectory>
+                            <!-- Configure the directory which contents are copied to the target directory. Disable properties filtering. -->
+                            <resources>
+                                <resource>
+                                    <directory>${project.basedir}/src/main/config</directory>
+                                    <filtering>false</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!--> mvn clean -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>./target</directory>
+                        </fileset>
+                        <fileset>
+                            <directory>./solr</directory>
+                        </fileset>
+                        <fileset>
+                            <directory>./contrib</directory>
+                        </fileset>
+                        <fileset>
+                            <directory>./dist</directory>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin>
+
+            <!-- copy remote repositories to a specified location -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.3</version>
+                <executions>
+                    <!-- Jetty Runner -->
+                    <execution>
+                        <id>jetty-runner</id>
+                        <phase>package</phase>
+                        <goals><goal>copy</goal></goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.mortbay.jetty</groupId>
+                                    <artifactId>jetty-runner</artifactId>
+                                    <version>7.5.4.v20111024</version>
+                                    <destFileName>jetty-runner.jar</destFileName>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                    <!-- Solr/Clustering/dist -->
+                    <execution>
+                        <id>solr-clustering</id>
+                        <phase>package</phase>
+                        <goals><goal>copy</goal></goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.apache.solr</groupId>
+                                    <artifactId>solr-clustering</artifactId>
+                                    <version>5.1.0</version>
+                                    <outputDirectory>${project.basedir}/dist</outputDirectory>
+                                    <destFileName>solr-clustering-5.1.0.jar</destFileName>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                    <!-- Solr/Clustering/contrib -->
+                    <execution>
+                        <id>attributes-binder</id>
+                        <phase>package</phase>
+                        <goals><goal>copy</goal></goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.carrot2.attributes</groupId>
+                                    <artifactId>attributes-binder</artifactId>
+                                    <version>1.2.1</version>
+                                    <outputDirectory>${dir.contrib.clustering}</outputDirectory>
+                                    <destFileName>attributes-binder-1.2.1.jar</destFileName>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>carrot2-mini</id>
+                        <phase>package</phase>
+                        <goals><goal>copy</goal></goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.carrot2</groupId>
+                                    <artifactId>carrot2-mini</artifactId>
+                                    <version>3.9.0</version>
+                                    <outputDirectory>${dir.contrib.clustering}</outputDirectory>
+                                    <destFileName>carrot2-mini-3.9.0.jar</destFileName>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>hppc</id>
+                        <phase>package</phase>
+                        <goals><goal>copy</goal></goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>com.carrotsearch</groupId>
+                                    <artifactId>hppc</artifactId>
+                                    <version>0.5.2</version>
+                                    <outputDirectory>${dir.contrib.clustering}</outputDirectory>
+                                    <destFileName>hppc-0.5.2.jar</destFileName>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>jackson-core-asl</id>
+                        <phase>package</phase>
+                        <goals><goal>copy</goal></goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.codehaus.jackson</groupId>
+                                    <artifactId>jackson-core-asl</artifactId>
+                                    <version>1.9.13</version>
+                                    <outputDirectory>${dir.contrib.clustering}</outputDirectory>
+                                    <destFileName>jackson-core-asl-1.9.13.jar</destFileName>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>jackson-mapper-asl</id>
+                        <phase>package</phase>
+                        <goals><goal>copy</goal></goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.codehaus.jackson</groupId>
+                                    <artifactId>jackson-mapper-asl</artifactId>
+                                    <version>1.9.13</version>
+                                    <outputDirectory>${dir.contrib.clustering}</outputDirectory>
+                                    <destFileName>jackson-mapper-asl-1.9.13.jar</destFileName>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>mahout-collections</id>
+                        <phase>package</phase>
+                        <goals><goal>copy</goal></goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.apache.mahout</groupId>
+                                    <artifactId>mahout-collections</artifactId>
+                                    <version>1.0</version>
+                                    <outputDirectory>${dir.contrib.clustering}</outputDirectory>
+                                    <destFileName>mahout-collections-1.0.jar</destFileName>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>mahout-math</id>
+                        <phase>package</phase>
+                        <goals><goal>copy</goal></goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.apache.mahout</groupId>
+                                    <artifactId>mahout-math</artifactId>
+                                    <version>0.6</version>
+                                    <outputDirectory>${dir.contrib.clustering}</outputDirectory>
+                                    <destFileName>mahout-math-0.6.jar</destFileName>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>simple-xml</id>
+                        <phase>package</phase>
+                        <goals><goal>copy</goal></goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.simpleframework</groupId>
+                                    <artifactId>simple-xml</artifactId>
+                                    <version>2.7</version>
+                                    <outputDirectory>${dir.contrib.clustering}</outputDirectory>
+                                    <destFileName>simple-xml-2.7.jar</destFileName>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

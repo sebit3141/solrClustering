@@ -1,0 +1,16 @@
+#ignore Mac
+.DS_Store
+#ignore Project
+contrib
+dist
+solr
+target
+#ignore Eclispe
+${solr.solr.home}
+.classpath
+.project
+.settings
+#ingore others
+*.iml
+overlays
+.idea
