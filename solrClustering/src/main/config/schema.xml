@@ -266,7 +266,7 @@
    <copyField source="title" dest="text_facet"/>
    <copyField source="description" dest="text_facet"/>
    <copyField source="content" dest="text_facet"/>
-	
+   
    <!-- Above, multiple source fields are copied to the [text] field. 
 	  Another way to map multiple source fields to the same 
 	  destination field is to use the dynamic field syntax. 
