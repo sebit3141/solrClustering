@@ -1,19 +1,74 @@
-<!-- 
-  Default configuration for the bisecting k-means clustering algorithm.
-  
-  This file can be loaded (and saved) by Carrot2 Workbench.
-  http://project.carrot2.org/download.html
--->
-<attribute-sets default="attributes">
-    <attribute-set id="attributes">
-      <value-set>
-        <label>attributes</label>
-          <attribute key="MultilingualClustering.defaultLanguage">
-            <value type="org.carrot2.core.LanguageCode" value="ENGLISH"/>
-          </attribute>
-          <attribute key="MultilingualClustering.languageAggregationStrategy">
-            <value type="org.carrot2.text.clustering.MultilingualClustering$LanguageAggregationStrategy" value="FLATTEN_MAJOR_LANGUAGE"/>
-          </attribute>
-      </value-set>
+<attribute-sets default="overridden-attributes">
+  <attribute-set id="overridden-attributes">
+    <value-set based-on="defaults">
+      <label>overridden-attributes</label>
+    </value-set>
+  </attribute-set>
+  <attribute-set id="defaults">
+    <value-set>
+      <label>defaults</label>
+      <attribute key="BisectingKMeansClusteringAlgorithm.clusterCount">
+        <value type="java.lang.Integer" value="25"/>
+      </attribute>
+      <attribute key="BisectingKMeansClusteringAlgorithm.labelCount">
+        <value type="java.lang.Integer" value="3"/>
+      </attribute>
+      <attribute key="BisectingKMeansClusteringAlgorithm.maxIterations">
+        <value type="java.lang.Integer" value="15"/>
+      </attribute>
+      <attribute key="BisectingKMeansClusteringAlgorithm.partitionCount">
+        <value type="java.lang.Integer" value="2"/>
+      </attribute>
+      <attribute key="BisectingKMeansClusteringAlgorithm.useDimensionalityReduction">
+        <value type="java.lang.Boolean" value="true"/>
+      </attribute>
+      <attribute key="CaseNormalizer.dfThreshold">
+        <value type="java.lang.Integer" value="1"/>
+      </attribute>
+      <attribute key="merge-resources">
+        <value type="java.lang.Boolean" value="true"/>
+      </attribute>
+      <attribute key="MultilingualClustering.defaultLanguage">
+        <value type="org.carrot2.core.LanguageCode" value="ENGLISH"/>
+      </attribute>
+      <attribute key="MultilingualClustering.languageAggregationStrategy">
+        <value type="org.carrot2.text.clustering.MultilingualClustering$LanguageAggregationStrategy" value="FLATTEN_MAJOR_LANGUAGE"/>
+      </attribute>
+      <attribute key="reload-resources">
+        <value type="java.lang.Boolean" value="false"/>
+      </attribute>
+      <attribute key="TermDocumentMatrixBuilder.maximumMatrixSize">
+        <value type="java.lang.Integer" value="37500"/>
+      </attribute>
+      <attribute key="TermDocumentMatrixBuilder.maxWordDf">
+        <value type="java.lang.Double" value="0.9"/>
+      </attribute>
+      <attribute key="TermDocumentMatrixBuilder.termWeighting">
+        <value>
+          <wrapper class="org.carrot2.text.vsm.LogTfIdfTermWeighting"/>
+        </value>
+      </attribute>
+      <attribute key="TermDocumentMatrixBuilder.titleWordsBoost">
+        <value type="java.lang.Double" value="2.0"/>
+      </attribute>
+      <attribute key="TermDocumentMatrixReducer.factorizationFactory">
+        <value>
+          <wrapper class="org.carrot2.matrix.factorization.NonnegativeMatrixFactorizationEDFactory"/>
+        </value>
+      </attribute>
+      <attribute key="TermDocumentMatrixReducer.factorizationQuality">
+        <value type="org.carrot2.matrix.factorization.IterationNumberGuesser$FactorizationQuality" value="HIGH"/>
+      </attribute>
+      <attribute key="Tokenizer.documentFields">
+        <value>
+          <wrapper class="org.carrot2.util.simplexml.ListSimpleXmlWrapper">
+            <list>
+              <value value="title"/>
+              <value value="snippet"/>
+            </list>
+          </wrapper>
+        </value>
+      </attribute>
+    </value-set>
   </attribute-set>
 </attribute-sets>

@@ -1,19 +1,100 @@
-<!-- 
-  Default configuration for the STC clustering algorithm.
-
-  This file can be loaded (and saved) by Carrot2 Workbench.
-  http://project.carrot2.org/download.html
--->
-<attribute-sets default="attributes">
-    <attribute-set id="attributes">
-      <value-set>
-        <label>attributes</label>
-          <attribute key="MultilingualClustering.defaultLanguage">
-            <value type="org.carrot2.core.LanguageCode" value="ENGLISH"/>
-          </attribute>
-          <attribute key="MultilingualClustering.languageAggregationStrategy">
-            <value type="org.carrot2.text.clustering.MultilingualClustering$LanguageAggregationStrategy" value="FLATTEN_MAJOR_LANGUAGE"/>
-          </attribute>
-      </value-set>
+<attribute-sets default="overridden-attributes">
+  <attribute-set id="overridden-attributes">
+    <value-set based-on="defaults">
+      <label>overridden-attributes</label>
+      <attribute key="STCClusteringAlgorithm.maxClusters">
+        <value type="java.lang.Integer" value="10"/>
+      </attribute>
+      <attribute key="STCClusteringAlgorithm.maxDescPhraseLength">
+        <value type="java.lang.Integer" value="3"/>
+      </attribute>
+      <attribute key="STCClusteringAlgorithm.maxPhrases">
+        <value type="java.lang.Integer" value="4"/>
+      </attribute>
+      <attribute key="STCClusteringAlgorithm.mergeThreshold">
+        <value type="java.lang.Double" value="0.3"/>
+      </attribute>
+    </value-set>
+  </attribute-set>
+  <attribute-set id="defaults">
+    <value-set>
+      <label>defaults</label>
+      <attribute key="CaseNormalizer.dfThreshold">
+        <value type="java.lang.Integer" value="1"/>
+      </attribute>
+      <attribute key="merge-resources">
+        <value type="java.lang.Boolean" value="true"/>
+      </attribute>
+      <attribute key="MultilingualClustering.defaultLanguage">
+        <value type="org.carrot2.core.LanguageCode" value="ENGLISH"/>
+      </attribute>
+      <attribute key="MultilingualClustering.languageAggregationStrategy">
+        <value type="org.carrot2.text.clustering.MultilingualClustering$LanguageAggregationStrategy" value="FLATTEN_MAJOR_LANGUAGE"/>
+      </attribute>
+      <attribute key="reload-resources">
+        <value type="java.lang.Boolean" value="false"/>
+      </attribute>
+      <attribute key="STCClusteringAlgorithm.documentCountBoost">
+        <value type="java.lang.Double" value="1.0"/>
+      </attribute>
+      <attribute key="STCClusteringAlgorithm.ignoreWordIfInFewerDocs">
+        <value type="java.lang.Integer" value="2"/>
+      </attribute>
+      <attribute key="STCClusteringAlgorithm.ignoreWordIfInHigherDocsPercent">
+        <value type="java.lang.Double" value="0.9"/>
+      </attribute>
+      <attribute key="STCClusteringAlgorithm.maxBaseClusters">
+        <value type="java.lang.Integer" value="300"/>
+      </attribute>
+      <attribute key="STCClusteringAlgorithm.maxClusters">
+        <value type="java.lang.Integer" value="15"/>
+      </attribute>
+      <attribute key="STCClusteringAlgorithm.maxDescPhraseLength">
+        <value type="java.lang.Integer" value="4"/>
+      </attribute>
+      <attribute key="STCClusteringAlgorithm.maxPhraseOverlap">
+        <value type="java.lang.Double" value="0.6"/>
+      </attribute>
+      <attribute key="STCClusteringAlgorithm.maxPhrases">
+        <value type="java.lang.Integer" value="3"/>
+      </attribute>
+      <attribute key="STCClusteringAlgorithm.mergeStemEquivalentBaseClusters">
+        <value type="java.lang.Boolean" value="true"/>
+      </attribute>
+      <attribute key="STCClusteringAlgorithm.mergeThreshold">
+        <value type="java.lang.Double" value="0.6"/>
+      </attribute>
+      <attribute key="STCClusteringAlgorithm.minBaseClusterScore">
+        <value type="java.lang.Double" value="2.0"/>
+      </attribute>
+      <attribute key="STCClusteringAlgorithm.minBaseClusterSize">
+        <value type="java.lang.Integer" value="2"/>
+      </attribute>
+      <attribute key="STCClusteringAlgorithm.mostGeneralPhraseCoverage">
+        <value type="java.lang.Double" value="0.5"/>
+      </attribute>
+      <attribute key="STCClusteringAlgorithm.optimalPhraseLength">
+        <value type="java.lang.Integer" value="3"/>
+      </attribute>
+      <attribute key="STCClusteringAlgorithm.optimalPhraseLengthDev">
+        <value type="java.lang.Double" value="2.0"/>
+      </attribute>
+      <attribute key="STCClusteringAlgorithm.scoreWeight">
+        <value type="java.lang.Double" value="1.0"/>
+      </attribute>
+      <attribute key="STCClusteringAlgorithm.singleTermBoost">
+        <value type="java.lang.Double" value="0.5"/>
+      </attribute>
+      <attribute key="Tokenizer.documentFields">
+        <value>
+          <wrapper class="org.carrot2.util.simplexml.ListSimpleXmlWrapper">
+            <list>
+              <value value="title"/>
+              <value value="snippet"/>
+            </list>
+          </wrapper>
+        </value>
+      </attribute>
+    </value-set>
   </attribute-set>
 </attribute-sets>

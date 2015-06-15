@@ -1498,7 +1498,7 @@
       <!-- Field name with the logical "title" of a each document (optional) -->
       <str name="carrot.title">title</str>
       <!-- Field name with the logical "URL" of a each document (optional) -->
-      <str name="carrot.url">displayUrl</str>
+      <str name="carrot.url">rank</str>
       <!-- Field name with the logical "content" of a each document (optional) -->
       <str name="carrot.snippet">description</str>
       <!-- Apply highlighter to the title/ content and use this for clustering. -->
